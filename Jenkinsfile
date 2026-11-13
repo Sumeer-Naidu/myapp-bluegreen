@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     def live = sh(
-                        script: "kubectl get svc myapp-service -o jsonpath='{.spec.selector.version}' 2>/dev/null || echo none",
+                        script: "kubectl get svc myapp-bg-service -o jsonpath='{.spec.selector.version}' 2>/dev/null || echo none",
                         returnStdout: true).trim()
                     env.OLD_COLOR = live
                     env.NEW_COLOR = (live == 'blue') ? 'green' : 'blue'
@@ -45,9 +45,9 @@ pipeline {
         }
         stage('Switch Traffic') {
             steps {
-                sh 'kubectl get svc myapp-service || kubectl apply -f service.yaml'
-                sh """kubectl patch svc myapp-service -p '{"spec":{"selector":{"app":"myapp","version":"${env.NEW_COLOR}"}}}'"""
-                sh 'kubectl get svc myapp-service -o jsonpath="{.spec.selector.version}"'
+                sh 'kubectl get svc myapp-bg-service || kubectl apply -f service.yaml'
+                sh """kubectl patch svc myapp-bg-service -p '{"spec":{"selector":{"app":"myapp","version":"${env.NEW_COLOR}"}}}'"""
+                sh 'kubectl get svc myapp-bg-service -o jsonpath="{.spec.selector.version}"'
             }
         }
     }

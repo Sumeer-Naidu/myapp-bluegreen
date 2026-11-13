@@ -16,7 +16,7 @@ waits until its pods are ready, then switches the Service selector to it.
   `/var/lib/jenkins/.kube/config`.
 
 ## Check which color is live
-    kubectl get svc myapp-service -o jsonpath='{.spec.selector.version}'
+    kubectl get svc myapp-bg-service -o jsonpath='{.spec.selector.version}'
 
 ## Instant rollback (switch back to the old color)
-    kubectl patch svc myapp-service -p '{"spec":{"selector":{"app":"myapp","version":"blue"}}}'
+    kubectl patch svc myapp-bg-service -p '{"spec":{"selector":{"app":"myapp","version":"blue"}}}'
